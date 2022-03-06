@@ -7,33 +7,37 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-
+import { Produto } from './produtos.model';
 @Controller('produtos')
 export class ProdutosController {
+  produtos: Produto[] = [
+    new Produto('LIV01', 'Livro TDD', 29.9),
+    new Produto('LIV02', 'Livro TDD', 29.9),
+    new Produto('LIV06', 'Livro TDD', 29.9),
+  ];
   @Get()
-  getAll(): string {
-    return 'Lista todos os produtos';
+  getAll(): Produto[] {
+    return this.produtos;
   }
 
   @Get(':id')
-  getOne(@Param() params): string {
-    return `Retorna os dados do produto ${params.id}`;
+  getOne(@Param() params): Produto {
+    return this.produtos[0];
   }
 
   @Post()
-  store(@Body() body): string {
-    console.log(body);
-    return 'Produto Criado';
+  store(@Body() produto: Produto) {
+    produto.id = 100;
+    this.produtos.push(produto);
   }
 
   @Put()
-  update(@Body() body): string {
-    console.log(body);
-    return 'Produto Atualizado';
+  update(@Body() produto: Produto) {
+    return produto;
   }
 
   @Delete(':id')
-  delete(@Param() params): string {
-    return `Apagar o produto ${params.id}`;
+  delete(@Param() params) {
+    this.produtos.pop();
   }
 }
